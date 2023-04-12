@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Algoritmo DDA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.dom.min.js"></script>
+    <style>
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Algoritmo DDA
+        function DDA(x1, y1, x2, y2) {
+            let dx = x2 - x1;
+            let dy = y2 - y1;
+            let steps = Math.abs(dx) > Math.abs(dy) ? Math.abs(dx) : Math.abs(dy);
+            let xIncrement = dx / steps;
+            let yIncrement = dy / steps;
+            let x = x1;
+            let y = y1;
+
+            for (let i = 0; i <= steps; i++) {
+                point(x, y);
+                x += xIncrement;
+                y += yIncrement;
+            }
+        }
+
+        // Función rectángulo
+        function rectangulo(x, y, ancho, alto) {
+            DDA(x, y, x + ancho, y);
+            DDA(x + ancho, y, x + ancho, y + alto);
+            DDA(x + ancho, y + alto, x, y + alto);
+            DDA(x, y + alto, x, y);
+        }
+
+        let rect1X;
+        let rect1Y;
+        let rect1W = 100;
+        let rect1H = 100;
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            rect1X = windowWidth / 2 - 50;
+            rect1Y = windowHeight / 2 - 50;
+
+        }
+
+        function draw() {
+            background(255);
+
+            // Dibujar rectángulo 1
+            noFill();
+            stroke(0);
+            strokeWeight(1);
+            rectangulo(rect1X, rect1Y, rect1W, rect1H);
+
+            // Dibujar rectángulo 2
+            let rect2X = mouseX;
+            let rect2Y = mouseY;
+            let rect2W = 100;
+            let rect2H = 100;
+
+            noFill();
+            stroke(0);
+            strokeWeight(1);
+            rectangulo(rect2X, rect2Y, rect2W, rect2H);
+
+            // Detectar colisión
+            if (rect1X < rect2X + rect2W && rect1X + rect1W > rect2X && rect1Y < rect2Y + rect2H && rect1Y + rect1H > rect2Y) {
+                fill("blue");
+                noStroke();
+                rect(rect1X, rect1Y, rect1W, rect1H);
+
+                fill("blue");
+                noStroke();
+                rect(rect2X, rect2Y, rect2W, rect2H);
+            }
+        }
+    </script>
+</body>
+</html>
